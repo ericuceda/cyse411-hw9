@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   res.removeHeader('X-Powered-By');
-  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'none';");
   res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
   next();
 });
@@ -35,7 +35,11 @@ const limiter = rateLimit({
 app.use(limiter);
 
 const csrfProtection = csrf({
-  cookie: true,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'strict'
+  },
   ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE']
 });
 app.use(csrfProtection);

@@ -21,7 +21,11 @@ const limiter = rateLimit({
 app.use(limiter);
 
 const csrfProtection = csrf({
-  cookie: true,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'strict'
+  },
   ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE']
 });
 app.use(csrfProtection);
