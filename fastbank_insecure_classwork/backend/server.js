@@ -5,6 +5,7 @@ const cors = require("cors");
 const sqlite3 = require("sqlite3").verbose();
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const csrf = require("csurf");
 const rateLimit = require("express-rate-limit");
 
 const app = express();
@@ -20,11 +21,24 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  res.removeHeader('X-Powered-By');
+  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  next();
+});
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100
 });
 app.use(limiter);
+
+const csrfProtection = csrf({
+  cookie: true,
+  ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE']
+});
+app.use(csrfProtection);
 
 // --- IN-MEMORY SQLITE DB (clean) ---
 const db = new sqlite3.Database(":memory:");
