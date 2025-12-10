@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const csrf = require("csurf");
 const rateLimit = require("express-rate-limit");
 
 const app = express();
@@ -19,9 +18,6 @@ const limiter = rateLimit({
   max: 100
 });
 app.use(limiter);
-
-const csrfProtection = csrf({ cookie: true });
-app.use(csrfProtection);
 
 /**
  * VULNERABLE FAKE USER DB

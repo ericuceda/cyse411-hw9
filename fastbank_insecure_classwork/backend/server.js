@@ -5,7 +5,6 @@ const cors = require("cors");
 const sqlite3 = require("sqlite3").verbose();
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const csrf = require("csurf");
 const rateLimit = require("express-rate-limit");
 
 const app = express();
@@ -26,9 +25,6 @@ const limiter = rateLimit({
   max: 100
 });
 app.use(limiter);
-
-const csrfProtection = csrf({ cookie: true });
-app.use(csrfProtection);
 
 // --- IN-MEMORY SQLITE DB (clean) ---
 const db = new sqlite3.Database(":memory:");
