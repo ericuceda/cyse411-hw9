@@ -36,4 +36,4 @@ jobs:
         with:
           target: 'http://host.docker.internal:3001'
           fail_action: true      # fail job if ZAP finds alerts
-          allow_issue_writing: false  # don't auto-open GitHub issues   
+          allow_issue_writing: false  # don't auto-open GitHub issues
